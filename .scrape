@@ -1,0 +1,117 @@
+import time
+from turtle import back, forward
+from idna import alabel
+from numpy import append, arange
+from openpyxl import Workbook
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+
+# Open requested URL
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+driver = webdriver.Chrome(executable_path=r"C:\Users\Samuel\Downloads\chromedriver_win32\chromedriver.exe")
+driver.maximize_window()
+driver.get('https://residence-inn.marriott.com/locations/')
+
+# If it does not work immediately, give it 10 seconds
+driver.implicitly_wait(10)
+
+# Toggle list just for North America (select region)
+driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[5]").click()
+time.sleep(3)
+# Toggle list for only United States 
+driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[2]").click()
+
+# Create a storage list file for gathered data
+states_list = []
+hotel_list = []
+hotel_list_US = []
+
+
+##### Function to find State names
+def find_states():
+# Find all state names
+   states = driver.find_elements(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3")
+   for state in states:
+        states_list.append(state.text)
+# Calling find_states function
+find_states()
+
+
+print('*'*50)
+
+time.sleep(2)
+
+
+##### Function to find all hotel names in North America
+def find_hotels_in_NA():
+    # View All Hotels
+    driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[3]/button").click()
+    time.sleep(1)
+    # Toggle list just for North America
+    driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/pacsys-directory-listings/div/div[5]/a").click()
+    hotels = driver.find_elements(By.XPATH,"//a[contains(@class,'swell_vertical-xs')]")
+    for hotel in hotels:
+        hotel_list.append(hotel.text)
+# Calling find_hotels_in_NA (North America) function
+find_hotels_in_NA()
+
+# Removing all empty lines in list of hotels
+hotel_list = list(filter(None, hotel_list))
+# List of Hotels ONLY in North America (skips the 27 Canada Hotels)
+hotel_list_US.append(hotel_list[27:860])
+
+
+
+## Create a new window and open same URL to get back to the original format of the page
+#driver.switch_to.new_window('window')
+#driver.get('https://residence-inn.marriott.com/locations/')
+## If it does not work immediately, give it 10 seconds
+#driver.implicitly_wait(10)
+#
+###### Function to find the address for each hotel
+##def adresses():
+#
+## Toggle list just for North America (select region)
+#driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[5]").click()
+#time.sleep(1)
+## Toggle list for only United States 
+#driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[2]").click()
+#time.sleep(1)
+## Toggle list for States
+#driver.find_elements(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[1]/a").click()
+#
+#time.sleep(3)
+#
+#driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3/a").click()
+#
+#address = driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/div/div/p[1]")
+#time.sleep(5)
+#print(address.text)
+#
+#
+#driver.close()
+
+
+
+
+
+
+
+
+
+
+
+
+#finallist = zip(states_list,hotel_list)
+#
+#wb = Workbook()
+#wb['Sheet'].title = 'Residence-Inn Locations'
+#sh1 = wb.active
+#sh1.append(['States','Names'])
+#for x in list(finallist):
+#    sh1.append(x)
+#
+#wb.save("FinalRecords.xlsx")
+
