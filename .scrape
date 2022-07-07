@@ -1,12 +1,11 @@
 import time
-from turtle import back, forward
-from idna import alabel
-from numpy import append, arange
 from openpyxl import Workbook
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+
+
 
 # Open requested URL
 driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
@@ -26,8 +25,7 @@ driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-dir
 # Create a storage list file for gathered data
 states_list = []
 hotel_list = []
-hotel_list_US = []
-
+random = ['N/A'] * 834
 
 ##### Function to find State names
 def find_states():
@@ -39,12 +37,67 @@ def find_states():
 find_states()
 
 
+# Index states to correct location
+random[3] = 'Alaska'
+random[11] = 'Alabama' 
+random[18] = 'Arkansas' 
+random[33] = 'Arizona'
+random[128] = 'California' 
+random[157] = 'Colorado' 
+random[169] = 'Connecticut'
+random[175] = 'District_of_Columbia' 
+random[179] = 'Delaware' 
+random[249] = 'Florida' 
+random[271] = 'Georgia' 
+random[273] = 'Hawaii'
+random[280] = 'Iowa'
+random[284] = 'Idaho' 
+random[304] = 'Illinois' 
+random[318] = 'Indiana' 
+random[323] = 'Kansas' 
+random[335] = 'Kentucky' 
+random[346] = 'Louisiana' 
+random[376] = 'Massachusetts' 
+random[396] = 'Maryland'
+random[401] = 'Maine' 
+random[419] = 'Michigan'
+random[433] = 'Minnesota' 
+random[448] = 'Missouri' 
+random[454] = 'Mississippi' 
+random[460] = 'Montana'
+random[484] = 'North_Carolina' 
+random[486] = 'North_Dakota' 
+random[490] = 'Nebraska' 
+random[497] = 'New_Hampshire' 
+random[518] = 'New_Jersey'  
+random[521] = 'New_Mexico' 
+random[528] = 'Nevada'
+random[560] = 'New_York' 
+random[588] = 'Ohio' 
+random[598] = 'Oklahoma' 
+random[601] = 'Oregon' 
+random[628] = 'Pennsylvania' 
+random[632] = 'Rhode_Island' 
+random[650] = 'South_Carolina' 
+random[652] = 'South_Dakota'
+random[669] = 'Tennessee' 
+random[749] = 'Texas' 
+random[757] = 'Utah' 
+random[793] = 'Virginia' 
+random[794] = 'Vermont' 
+random[809] = 'Washington' 
+random[828] = 'Wisconsin' 
+random[829] = 'West_Virginia' 
+random[830] = 'Wyoming'
+
+
+
 print('*'*50)
 
 time.sleep(2)
 
 
-##### Function to find all hotel names in North America
+#### Function to find all hotel names in North America
 def find_hotels_in_NA():
     # View All Hotels
     driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[3]/button").click()
@@ -60,58 +113,48 @@ find_hotels_in_NA()
 # Removing all empty lines in list of hotels
 hotel_list = list(filter(None, hotel_list))
 # List of Hotels ONLY in North America (skips the 27 Canada Hotels)
-hotel_list_US.append(hotel_list[27:860])
-
-
-
-## Create a new window and open same URL to get back to the original format of the page
-#driver.switch_to.new_window('window')
-#driver.get('https://residence-inn.marriott.com/locations/')
-## If it does not work immediately, give it 10 seconds
-#driver.implicitly_wait(10)
-#
-###### Function to find the address for each hotel
-##def adresses():
-#
-## Toggle list just for North America (select region)
-#driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[5]").click()
-#time.sleep(1)
-## Toggle list for only United States 
-#driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[2]").click()
-#time.sleep(1)
-## Toggle list for States
-#driver.find_elements(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[1]/a").click()
-#
-#time.sleep(3)
-#
-#driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3/a").click()
-#
-#address = driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/div/div/p[1]")
-#time.sleep(5)
-#print(address.text)
+hotel_list = hotel_list[27:860]
 #
 #
-#driver.close()
-
-
-
-
-
-
-
-
-
-
-
-
-#finallist = zip(states_list,hotel_list)
 #
-#wb = Workbook()
-#wb['Sheet'].title = 'Residence-Inn Locations'
-#sh1 = wb.active
-#sh1.append(['States','Names'])
-#for x in list(finallist):
-#    sh1.append(x)
 #
-#wb.save("FinalRecords.xlsx")
+### Create a new window and open same URL to get back to the original format of the page
+##driver.switch_to.new_window('window')
+##driver.get('https://residence-inn.marriott.com/locations/')
+### If it does not work immediately, give it 10 seconds
+##driver.implicitly_wait(10)
+##
+####### Function to find the address for each hotel
+###def adresses():
+##
+### Toggle list just for North America (select region)
+##driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[5]").click()
+##time.sleep(1)
+### Toggle list for only United States 
+##driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[2]").click()
+##time.sleep(1)
+### Toggle list for States
+##driver.find_elements(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[1]/a").click()
+##
+##time.sleep(3)
+##
+##driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3/a").click()
+##
+##address = driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/div/div/p[1]")
+##time.sleep(5)
+##print(address.text)
+##
+##
+##driver.close()
+#
+#
+finallist = zip(random,hotel_list,)
 
+wb = Workbook()
+wb['Sheet'].title = 'Residence-Inn Locations'
+sh1 = wb.active
+sh1.append(['States','Names'])
+for x in list(finallist):
+    sh1.append(x)
+
+wb.save("FinalRecords.xlsx")
