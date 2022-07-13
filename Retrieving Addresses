@@ -1,0 +1,64 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+
+
+# Open requested URL
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+driver = webdriver.Chrome(executable_path=r"C:\Users\Samuel\Downloads\chromedriver_win32\chromedriver.exe")
+driver.maximize_window()
+driver.get('https://residence-inn.marriott.com/locations/')
+
+# If it does not work immediately, give it 10 seconds
+driver.implicitly_wait(10)
+
+
+
+# Create list to store hotel adresses
+address_list = []
+#### Function to find the address for each hotel
+
+# Toggle list just for North America (select region)
+driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[5]").click()
+time.sleep(1)
+# Toggle list for only United States 
+U_S = driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3[2]").click()
+time.sleep(1)
+
+#Togglelist for individual state
+driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3/a").click()
+time.sleep(1)
+print('here')
+
+def toggle_hotel():
+
+    
+
+    def retrieving_adresses():
+        # Click individual hotel to get address
+        driver.find_element(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/h3/a").click()
+        location = driver.find_elements(By.XPATH,"//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/div/div/p[1]")
+        for address in location:   
+            address_list.append(address.text)
+
+            # Return to list of hotel names within State
+
+            driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/header/a/pacsys-icon").click()
+
+            
+
+            retrieving_adresses()
+    # Return to list of States
+    driver.find_element(By.XPATH, "//*[@id='content']/pacsys-animation[2]/pacsys-directory/div[2]/div/div[3]/div/header/a/pacsys-icon").click()
+
+        
+
+    time.sleep(6)
+
+
+
+print(address_list)
+
+
