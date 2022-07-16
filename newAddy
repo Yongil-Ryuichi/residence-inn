@@ -1,0 +1,36 @@
+import time
+from numpy import number
+from openpyxl import Workbook
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+
+# Open requested URL
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+driver = webdriver.Chrome(executable_path=r"C:\Users\Samuel\Downloads\chromedriver_win32\chromedriver.exe")
+driver.maximize_window()
+driver.get('https://www.hotels.com/')
+
+# If it does not work immediately, give it 10 seconds
+driver.implicitly_wait(10)
+
+# Toggle the search bar
+search = driver.find_element(By.XPATH, "//*[@id='lodging_search_form']/div/div/div[1]").click()
+time.sleep(2)
+# Enter name of hotel 
+driver.find_element(By.XPATH, "//*[@id='destination_form_field']").send_keys("ALABAMA RESIDENCE INN DECATUR")
+time.sleep(5)
+# Click on corresponding hotel
+driver.find_element(By.XPATH, "//*[@id='destination_form_field-menu']/div[2]/div[2]/ul/li[1]").click()
+time.sleep(3)
+# Enter the submit button to serach for result
+driver.find_element(By.XPATH, "//*[@id='submit_button']").click()
+time.sleep(2)
+# Click the hotel to go to its own site
+driver.find_element(By.XPATH, "//*[@id='app-layer-base']/div[1]/main/div/div/div/div[1]/section/div/div[2]/div/div[2]/section[2]/ol/li[1]").click()
+# Get the Hotel's address
+addy = driver.find_element(By.XPATH, "//*[@id='app-layer-base']/div[1]/main/div/div/div[1]/section/div[1]/div[2]/div[2]/div[1]/div/div[1]/div[2]/div/div/div[1]/div/div/div[1]")
+print(addy.text)
+ 
+
